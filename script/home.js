@@ -66,7 +66,7 @@ $(function() {
     });
     console.log(value);
     $.ajax({
-        url: 'http://127.0.0.1:8080',
+        url: 'http://127.0.0.1:80',
         dataType: "jsonp",
         data: JSON.stringify(value),
         type: 'POST',
