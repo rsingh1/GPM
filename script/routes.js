@@ -39,16 +39,16 @@ router.get('/images/logo.png', function(req, res, next) {
 });
 router.post('/', function (req, res) {
   console.log('Post request recieved!');
-  let un, up;
+  var un, up;
   console.log('body: ' + JSON.stringify(req.body));
   un = JSON.parse(JSON.stringify(req.body));
-  let userName, userMobile, userEmail, userLocationFrom, userLocationTo;
+  var userName, userMobile, userEmail, userLocationFrom, userLocationTo;
   userName = un.usrName  || "";
   userMobile= un.usrMobile  || "";
   userEmail = un.usrEmail || "";
   userLocationFrom = un.usrLocationFrom || "";
   userLocationTo = un.usrLocationTo || "";
-  let msgHTMLBODY = "<table style="+"'border: 1px solid #990000; border-collapse: collapse; background-color: #f1f1c1; width: 100%'"+
+  var msgHTMLBODY = "<table style="+"'border: 1px solid #990000; border-collapse: collapse; background-color: #f1f1c1; width: 100%'"+
   "<tr>"+
     "<th>Form Item</th>"+
     "<th>Value</th>"+
