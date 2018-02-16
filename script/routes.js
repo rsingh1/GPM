@@ -37,8 +37,38 @@ router.get('/images/finallogo1.png', function(req, res, next) {
 router.get('/images/logo.png', function(req, res, next) {
         res.sendFile('logo.png', { root: 'images' });
 });
-router.post('/', function (req, res) {
-  console.log('Post request recieved!');
+
+router.post('/contactFormData', function (req, res) {
+  console.log('Contact form post request recieved!');
+  var contactFormRaw = JSON.parse(JSON.stringify(req.body));
+  var formUserName, formUserEmail, formUserComment;
+  formUserName = contactFormRaw.Name || "";
+  formUserEmail = contactFormRaw.Email || "";
+  formUserComment = contactFormRaw.Comment || "";
+  var nodeSendEmailBody = "<table style="+"'border: 1px solid #990000; border-collapse: collapse; background-color: #f4511e; width: 100%'"+
+  "<tr>"+
+    "<th>Form Item</th>"+
+    "<th>Value</th>"+
+  "</tr>"+
+  "<tr>"+
+  "<td>Customer Name</td>"+
+  "<td>"+formUserName+"</td>"  +
+  "</tr>"+
+  "<tr>"+
+  "<td>Email</td>"+
+  "<td>"+formUserEmail+"</td>"  +
+  "</tr>"+
+  "<tr>"+
+  "<td>Comment</td>"+
+  "<td>"+formUserComment+"</td>"  +
+  "</tr>"+
+"</table>";
+  emailSender.sendNodeEmail(nodeSendEmailBody);
+  res.send({"Result" : "OK"});
+
+});
+router.post('/modalUserQuotation', function (req, res) {
+  console.log('Quote Modal Post request recieved!');
   var un, up;
   console.log('body: ' + JSON.stringify(req.body));
   un = JSON.parse(JSON.stringify(req.body));
@@ -48,7 +78,7 @@ router.post('/', function (req, res) {
   userEmail = un.usrEmail || "";
   userLocationFrom = un.usrLocationFrom || "";
   userLocationTo = un.usrLocationTo || "";
-  var msgHTMLBODY = "<table style="+"'border: 1px solid #990000; border-collapse: collapse; background-color: #f1f1c1; width: 100%'"+
+  var msgHTMLBODY = "<table style="+"'border: 1px solid #990000; border-collapse: collapse; background-color: #f4511e; width: 100%'"+
   "<tr>"+
     "<th>Form Item</th>"+
     "<th>Value</th>"+
@@ -64,6 +94,7 @@ router.post('/', function (req, res) {
   "<tr>"+
   "<td>Email</td>"+
   "<td>"+userEmail+"</td>"  +
+  "</tr>"+
   "<tr>"+
   "<td>From Location</td>"+
   "<td>"+userLocationFrom+"</td>"  +
@@ -77,6 +108,6 @@ router.post('/', function (req, res) {
 
   emailSender.sendNodeEmail(msgHTMLBODY);
   res.send({"Result" : "OK"});
-})
+});
 
 module.exports = router;
