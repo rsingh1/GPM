@@ -38,7 +38,6 @@ $(document).ready(function() {
         });
     });
 });
-
 function myMap() {
     var myCenter = new google.maps.LatLng(28.565656, 77.188348);
     var mapProp = {
@@ -66,7 +65,7 @@ $(function() {
     });
     console.log(value);
     $.ajax({
-          url:"/",
+          url:"/modalUserQuotation",
               type:"POST",
               data:JSON.stringify(value),
               contentType:"application/json; charset=utf-8",
@@ -74,6 +73,31 @@ $(function() {
               success: function(data){
                 $("#responseModal").modal('show');
                 console.log('Success');
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) {
+                  console.log("Status: " + textStatus + "Error: " + errorThrown);
+              }
+            });
+  });
+  $('#contactForm-SendData').click(function() {
+    var sendQueryObject = {
+                };
+    sendQueryObject.Name = $('#contactForm-Name').val();
+    sendQueryObject.Email = $('#contactForm-Email').val();
+    sendQueryObject.Comment = $('#contactForm-Comment').val();
+    console.log(sendQueryObject);
+    $.ajax({
+          url:"/contactFormData",
+              type:"POST",
+              data:JSON.stringify(sendQueryObject),
+              contentType:"application/json; charset=utf-8",
+              dataType:"json",
+              success: function(data){
+                $("#responseModal").modal('show');
+                console.log('Success');
+                $('#contactForm-Name').val("");
+                $('#contactForm-Email').val("");
+                $('#contactForm-Comment').val("");
               },
               error: function(XMLHttpRequest, textStatus, errorThrown) {
                   console.log("Status: " + textStatus + "Error: " + errorThrown);
