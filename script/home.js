@@ -72,7 +72,7 @@ $(function() {
               dataType:"json",
               success: function(data){
                 $("#responseModal").modal('show');
-                console.log('Success');
+                console.log('Added data into DB');
               },
               error: function(XMLHttpRequest, textStatus, errorThrown) {
                   console.log("Status: " + textStatus + "Error: " + errorThrown);
