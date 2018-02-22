@@ -111,7 +111,7 @@ router.post('/modalUserQuotation', function (req, res) {
 "</table>";
 //  let msgBody = "User Name: "+userName+"\n\nUser Mobile: "+userMobile+"\n\nUser Email:"+userEmail+"\n\nLocation From:  "+userLocationFrom+"\n\nLocationTo: "+userLocationTo;
 
-  //emailSender.sendNodeEmail(msgHTMLBODY);
+  emailSender.sendNodeEmail(msgHTMLBODY);
   insertData.insertDataIntoMongo(nodeQuoteFormData);
   res.send({"Result" : "OK"});
 });
