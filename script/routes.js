@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require("path");
 var qs = require('querystring');
 var emailSender = require('./nodeSendEmail');
+var insertData = require('./nodeInsertMongo');
 router.get('/', function(req, res){
   res.sendFile('Index.html', { root: '.' });
 });
@@ -42,9 +43,11 @@ router.post('/contactFormData', function (req, res) {
   console.log('Contact form post request recieved!');
   var contactFormRaw = JSON.parse(JSON.stringify(req.body));
   var formUserName, formUserEmail, formUserComment;
-  formUserName = contactFormRaw.Name || "";
-  formUserEmail = contactFormRaw.Email || "";
-  formUserComment = contactFormRaw.Comment || "";
+  var nodeQuoteFormData ={};
+  nodeQuoteFormData.Source = "ContactModal";
+  nodeQuoteFormData.userName = contactFormRaw.Name || "";
+  nodeQuoteFormData.usrEmail = contactFormRaw.Email || "";
+  nodeQuoteFormData.Comment = contactFormRaw.Comment || "";
   var nodeSendEmailBody = "<table style="+"'border: 1px solid #990000; border-collapse: collapse; background-color: #f4511e; width: 100%'"+
   "<tr>"+
     "<th>Form Item</th>"+
@@ -52,18 +55,19 @@ router.post('/contactFormData', function (req, res) {
   "</tr>"+
   "<tr>"+
   "<td>Customer Name</td>"+
-  "<td>"+formUserName+"</td>"  +
+  "<td>"+nodeQuoteFormData.userName+"</td>"  +
   "</tr>"+
   "<tr>"+
   "<td>Email</td>"+
-  "<td>"+formUserEmail+"</td>"  +
+  "<td>"+nodeQuoteFormData.usrEmail+"</td>"  +
   "</tr>"+
   "<tr>"+
   "<td>Comment</td>"+
-  "<td>"+formUserComment+"</td>"  +
+  "<td>"+nodeQuoteFormData.Comment+"</td>"  +
   "</tr>"+
 "</table>";
   emailSender.sendNodeEmail(nodeSendEmailBody);
+  insertData.insertDataIntoMongo(nodeQuoteFormData);
   res.send({"Result" : "OK"});
 
 });
@@ -72,12 +76,13 @@ router.post('/modalUserQuotation', function (req, res) {
   var un, up;
   console.log('body: ' + JSON.stringify(req.body));
   un = JSON.parse(JSON.stringify(req.body));
-  var userName, userMobile, userEmail, userLocationFrom, userLocationTo;
-  userName = un.usrName  || "";
-  userMobile= un.usrMobile  || "";
-  userEmail = un.usrEmail || "";
-  userLocationFrom = un.usrLocationFrom || "";
-  userLocationTo = un.usrLocationTo || "";
+  var nodeQuoteFormData ={};
+  nodeQuoteFormData.Source = "QuoteModal";
+  nodeQuoteFormData.userName = un.usrName  || "";
+  nodeQuoteFormData.userMobile= un.usrMobile  || "";
+  nodeQuoteFormData.userEmail = un.usrEmail || "";
+  nodeQuoteFormData.userLocationFrom = un.usrLocationFrom || "";
+  nodeQuoteFormData.userLocationTo = un.usrLocationTo || "";
   var msgHTMLBODY = "<table style="+"'border: 1px solid #990000; border-collapse: collapse; background-color: #f4511e; width: 100%'"+
   "<tr>"+
     "<th>Form Item</th>"+
@@ -85,28 +90,29 @@ router.post('/modalUserQuotation', function (req, res) {
   "</tr>"+
   "<tr>"+
   "<td>Customer Name</td>"+
-  "<td>"+userName+"</td>"  +
+  "<td>"+nodeQuoteFormData.userName+"</td>"  +
   "</tr>"+
   "<tr>"+
   "<td>Mobile</td>"+
-  "<td>"+userMobile+"</td>"  +
+  "<td>"+nodeQuoteFormData.userMobile+"</td>"  +
   "</tr>"+
   "<tr>"+
   "<td>Email</td>"+
-  "<td>"+userEmail+"</td>"  +
+  "<td>"+nodeQuoteFormData.userEmail+"</td>"  +
   "</tr>"+
   "<tr>"+
   "<td>From Location</td>"+
-  "<td>"+userLocationFrom+"</td>"  +
+  "<td>"+nodeQuoteFormData.userLocationFrom+"</td>"  +
   "</tr>"+
   "<tr>"+
   "<td>To Location</td>" +
-  "<td>"+userLocationTo+"</td>"  +
+  "<td>"+nodeQuoteFormData.userLocationTo+"</td>"  +
   "</tr>"+
 "</table>";
 //  let msgBody = "User Name: "+userName+"\n\nUser Mobile: "+userMobile+"\n\nUser Email:"+userEmail+"\n\nLocation From:  "+userLocationFrom+"\n\nLocationTo: "+userLocationTo;
 
-  emailSender.sendNodeEmail(msgHTMLBODY);
+  //emailSender.sendNodeEmail(msgHTMLBODY);
+  insertData.insertDataIntoMongo(nodeQuoteFormData);
   res.send({"Result" : "OK"});
 });
 
